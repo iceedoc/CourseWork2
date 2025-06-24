@@ -1,6 +1,8 @@
 package pro.sky.java.course.examinerservice.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import pro.sky.java.course.examinerservice.domain.Question;
 
 import java.util.Collection;
@@ -18,7 +20,8 @@ public class ExaminerServiceImpl implements ExaminerService {
     @Override
     public Collection<Question> getQuestions(int amount) {
         if (amount > service.getAll().size()) {
-            throw new RuntimeException("Запрошено больше вопросов, чем есть в сервисе");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Запрошено больше вопросов, чем есть в сервисе");
+
         }
         Set<Question> result = new HashSet<>();
         while (result.size() < amount) {

@@ -11,7 +11,7 @@
 	<groupId>pro.sky.java.course</groupId>
 	<artifactId>examinerservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>examinerservice</name>
+	<name>examiner service</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

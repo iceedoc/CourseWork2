@@ -3,44 +3,40 @@ package pro.sky.java.course.examinerservice.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ResponseStatusException;
 import pro.sky.java.course.examinerservice.domain.Question;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ExaminerServiceImplTest {
-    private ExaminerServiceImpl examinerServiceTest;
-    private JavaQuestionService questionServiceTest;
+    private JavaQuestionService questionService;
+    private ExaminerServiceImpl examinerService;
 
     @BeforeEach
     public void setUp() {
-        questionServiceTest = new JavaQuestionService();
-        questionServiceTest.add("Question1", "Answer1");
-        questionServiceTest.add("Question2", "Answer2");
-        questionServiceTest.add("Question3", "Answer3");
-        examinerServiceTest = new ExaminerServiceImpl(questionServiceTest);
+        questionService = new JavaQuestionService();
+        questionService.add("Q1", "A1");
+        questionService.add("Q2", "A2");
+        questionService.add("Q3", "A3");
+        examinerService = new ExaminerServiceImpl(questionService);
     }
 
     @Test
-    public void testGetQuestions() {
-        int amount = 2;
-        Collection<Question> questions = examinerServiceTest.getQuestions(amount);
+    public void testGetQuestionsSuccess() {
+        Collection<Question> questions = examinerService.getQuestions(2);
         assertEquals(2, questions.size());
     }
 
-    public void testQuestionsMoreThanPerhaps() {
-        int amount = 10;
-        try {
-            examinerServiceTest.getQuestions(amount);
-            fail("Ожидаемое исключение ResponseStatusException");
-        } catch (ResponseStatusException e) {
-            HttpStatusCode statusCode = e.getStatusCode();
-            assertEquals(HttpStatus.BAD_REQUEST, statusCode);
-        }
+    @Test
+    public void testGetQuestionsMoreThanAvailable() {
+        String type = "java";
+        int amount = 15;
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            examinerService.getQuestions(amount);
+        });
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
 }

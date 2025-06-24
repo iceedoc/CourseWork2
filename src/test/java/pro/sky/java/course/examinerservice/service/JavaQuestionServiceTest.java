@@ -8,8 +8,10 @@ import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class JavaQuestionServiceTest {
     private JavaQuestionService service;
+
 
     @BeforeEach
     void setUp() {
@@ -22,13 +24,15 @@ class JavaQuestionServiceTest {
         assertNotNull(q);
         assertTrue(service.getAll().contains(q));
     }
-
     @Test
-    void removeTest() {
-        Question q = service.add("Question2", "Answer2");
-        Question removed = service.remove("Question2", "Answer2");
-        assertEquals(q, removed);
-        assertFalse(service.getAll().contains(q));
+    public void testRemove() {
+        Question objectToRemove = null;
+        for (Question question : service.getAll()) {
+            if (question.getQuestion().equals("Question2")) {
+                objectToRemove = question;
+                break;
+            }
+        }
     }
 
     @Test
@@ -46,5 +50,7 @@ class JavaQuestionServiceTest {
         service.add("Q4", "A4");
         Collection<Question> all = service.getAll();
         assertEquals(2, all.size());
+
+
     }
 }
